@@ -14,15 +14,15 @@ const heroQuotes = [
     text: "Be a light when the world can’t shine",
     author: "Luke Combs",
   },
-    {
+  {
     text: "Breathe in, breathe out, move on",
     author: "Jimmy Buffett",
   },
-    {
+  {
     text: "It’s a fine line between Saturday night and Sunday morning",
     author: "Jimmy Buffett",
   },
-    {
+  {
     text: "Long neck ice cold beer never broke my heart",
     author: "Luke Combs",
   },
@@ -49,10 +49,8 @@ const initialQuote = heroQuotes[0];
   </div>
 </section>
 
-<script type="application/json" id="hero-quotes-data">
-  {JSON.stringify(heroQuotes)}
-</script>
-<script type="module">
+<script type="application/json" id="hero-quotes-data" set:html={JSON.stringify(heroQuotes)}></script>
+<script type="module" is:inline>
   const container = document.querySelector('[data-quote-rotator]');
   const dataElement = document.getElementById('hero-quotes-data');
 
