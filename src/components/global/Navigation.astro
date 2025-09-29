@@ -1,0 +1,28 @@
+---
+import { socialLinks } from "@/data/social";
+
+const navLinks = [
+  { href: "#intro", label: "Intro" },
+  { href: "#frames", label: "Frames" },
+  { href: "#notes", label: "Notes" },
+  { href: "#music", label: "Music" },
+  { href: "#workflow", label: "Workflow" },
+  { href: "#contact", label: "Contact" }
+];
+---
+
+<nav class="border-b border-white/20 bg-black/80 backdrop-blur">
+  <div class="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 p-6 text-center md:flex-row md:justify-between">
+    <a href="/" class="font-black uppercase tracking-tight text-white">Ryan McKinnon</a>
+    <ul class="flex flex-wrap items-center justify-center gap-4 text-xs uppercase tracking-[0.4em] text-slate-300">
+      {navLinks.map((link) => (
+        <li>
+          <a class="hover:text-white" href={link.href}>{link.label}</a>
+        </li>
+      ))}
+    </ul>
+    <a class="button bg-transparent text-xs uppercase tracking-[0.4em]" href={socialLinks.email}>
+      Email Me
+    </a>
+  </div>
+</nav>

@@ -1,0 +1,38 @@
+---
+const testimonials = [
+  {
+    text: "If Dad isn't behind a camera, he's reorganizing his golf clubs. Pretty sure he dreams in nine-hole loops.",
+    author: "Jacks",
+    title: "Chief Range Finder",
+  },
+  {
+    text: "Group chat translation: \"Editing\" means Dad is probably golfing again. Someone please fact-check the handicap.",
+    author: "Addy",
+    title: "Reality Checker",
+  },
+  {
+    text: "Every \"new gadget\" arrives in pairs—one to test, one as a backup he swears is for us. Spoiler: it's not.",
+    author: "Justine",
+    title: "Logistics Boss",
+  },
+  {
+    text: "Woof transcript: promised a walk, grabbed the drone instead. I'll allow it for treats and belly rub overtime.",
+    author: "Ellie (the dog)",
+    title: "Head of Security",
+  },
+];
+---
+
+<div class="text-xs gap-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 p-8">
+  {
+    testimonials.map((item) => (
+      <figure class="flex flex-col justify-between h-full">
+        <blockquote class="font-normal text-eagle">{item.text}</blockquote>
+        <figcaption class="mt-3 not-italic">
+          <span class="block font-semibold mt-3 text-white">{item.author}</span>
+          <cite class="block text-eagle not-italic">{item.title}</cite>
+        </figcaption>
+      </figure>
+    ))
+  }
+</div>

@@ -1,0 +1,47 @@
+---
+import BgGrid from "@/components/assets/BgGrid.astro";
+
+const services = [
+  {
+    title: "Photo Stories",
+    description:
+      "Twelve years of sunrise chases, boat wakes, and family snapshots—curated into page bundles so every image keeps its context.",
+  },
+  {
+    title: "Travel Logs",
+    description:
+      "Notes from Florida to Maui. Markdown drafts sit beside RAW files until they’re ready for publish, whether in Hugo or Astro.",
+  },
+  {
+    title: "Build Pipeline",
+    description:
+      "Git commits trigger Cloudflare builds. Assets live in `static/` or `public/`, posts in `content/`, and everything is human-readable.",
+  },
+  {
+    title: "Future Experiments",
+    description:
+      "Blog, gear reviews, and maybe a print store. This layout is a sandbox for whatever comes next.",
+  },
+];
+---
+
+<section id="workflow" class="border-white/20 border-b divide-y divide-white/20">
+  <div class="px-8 py-6 relative">
+    <BgGrid />
+    <h2 class="text-3xl font-black text-white uppercase">
+      what's inside the site
+    </h2>
+  </div>
+  <div
+    class="text-white text-xs gap-3 gap-y-12 grid grid-cols-1 md:grid-cols-4 "
+  >
+    {
+      services.map(({ title, description }) => (
+        <div class="p-8">
+          <h3 class="text-lg uppercase font-black text-white">{title}</h3>
+          <p class="mt-3 text-eagle text-sm">{description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>

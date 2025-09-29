@@ -1,0 +1,86 @@
+---
+import BgGrid from "@/components/assets/BgGrid.astro";
+
+const heroQuotes = [
+  {
+    text: "If we couldn't laugh, we would all go insane",
+    author: "Jimmy Buffett",
+  },
+  {
+    text: "You can go your own way",
+    author: "Fleetwood Mac",
+  },
+  {
+    text: "Be a light when the world can’t shine",
+    author: "Luke Combs",
+  },
+    {
+    text: "Breathe in, breathe out, move on",
+    author: "Jimmy Buffett",
+  },
+    {
+    text: "It’s a fine line between Saturday night and Sunday morning",
+    author: "Jimmy Buffett",
+  },
+    {
+    text: "Long neck ice cold beer never broke my heart",
+    author: "Luke Combs",
+  },
+];
+
+const initialQuote = heroQuotes[0];
+---
+
+<section id="notes" class="border-white/20 border-b divide-y divide-white/20">
+  <div class="p-8 relative">
+    <BgGrid />
+    <p class="text-white font-black uppercase tracking-tight lg:text-7xl text-xl">
+      A refreshed home for my photo journals—same sunny fairways, Buffett still on repeat.
+    </p>
+  </div>
+  <div class="p-8">
+    <p
+      class="text-white font-black uppercase lg:text-3xl"
+      data-quote-rotator
+    >
+      <span data-quote-text>{initialQuote.text}</span>
+      <span data-quote-attribution> — {initialQuote.author}</span>
+    </p>
+  </div>
+</section>
+
+<script type="application/json" id="hero-quotes-data">
+  {JSON.stringify(heroQuotes)}
+</script>
+<script type="module">
+  const container = document.querySelector('[data-quote-rotator]');
+  const dataElement = document.getElementById('hero-quotes-data');
+
+  if (container && dataElement) {
+    let quotes;
+
+    try {
+      quotes = JSON.parse(dataElement.textContent || '[]');
+    } catch (error) {
+      quotes = [];
+      console.error('Failed to parse hero quotes data', error);
+    }
+
+    if (Array.isArray(quotes) && quotes.length > 1) {
+      const quoteText = container.querySelector('[data-quote-text]');
+      const quoteAttribution = container.querySelector('[data-quote-attribution]');
+
+      if (quoteText && quoteAttribution) {
+        let index = 0;
+
+        const updateQuote = () => {
+          index = (index + 1) % quotes.length;
+          quoteText.textContent = quotes[index].text;
+          quoteAttribution.textContent = ` — ${quotes[index].author}`;
+        };
+
+        setInterval(updateQuote, 10000);
+      }
+    }
+  }
+</script>

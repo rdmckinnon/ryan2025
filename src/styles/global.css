@@ -1,0 +1,458 @@
+@import "tailwindcss";
+
+:root {
+  --background0: #0d1b2a;
+  --background1: #1b263b;
+  --background2: #27344b;
+  --background3: #415a77;
+  --background4: rgba(65, 90, 119, 0.35);
+  --foreground0: #e0e1dd;
+  --foreground1: #c5d0e4;
+  --foreground2: #91a2ba;
+  --accent: #90e0ef;
+  --accent-soft: rgba(144, 224, 239, 0.18);
+  --highlight: #caf0f8;
+  --shadow: 0 28px 60px rgba(3, 6, 9, 0.65);
+  --radius: 18px;
+  --font-family: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: radial-gradient(circle at top left, rgba(65, 90, 119, 0.35), transparent 55%), var(--background0);
+  color: var(--foreground0);
+  font-family: var(--font-family);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--highlight);
+}
+
+main {
+  flex: 1 1 auto;
+}
+
+.webtui-main {
+  display: grid;
+  gap: 4rem;
+  padding: 6rem clamp(1.5rem, 4vw, 4rem) 5rem;
+  position: relative;
+}
+
+.webtui-nav {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  background: rgba(13, 27, 42, 0.92);
+  border: 1px solid rgba(145, 162, 186, 0.35);
+  border-radius: 12px;
+  padding: 0.75rem 1.2rem;
+  box-shadow: 0 16px 40px rgba(3, 6, 9, 0.45);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.webtui-nav__title {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  display: block;
+  color: var(--foreground2);
+  margin-bottom: 0.4rem;
+}
+
+.webtui-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.webtui-nav a {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--foreground1);
+}
+
+.webtui-nav a:hover {
+  color: var(--highlight);
+}
+
+.marquee-wrapper {
+  overflow: hidden;
+  position: relative;
+  padding-block: 0.75rem;
+}
+
+.marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: max-content;
+  animation: marquee-scroll 25s linear infinite;
+  text-transform: uppercase;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+section.webtui-section {
+  scroll-margin-top: 6rem;
+}
+
+.terminal {
+  position: relative;
+  background: rgba(27, 38, 59, 0.94);
+  border: 1px solid rgba(145, 162, 186, 0.35);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(2rem, 3vw, 3rem);
+  overflow: hidden;
+}
+
+.terminal::before {
+  content: '';
+  position: absolute;
+  top: 0.9rem;
+  left: 1.2rem;
+  width: 36px;
+  height: 12px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 6px, #ff5f56 3px, transparent 4px),
+    radial-gradient(circle at 18px, #ffbd2e 3px, transparent 4px),
+    radial-gradient(circle at 30px, #27c93f 3px, transparent 4px);
+  opacity: 0.7;
+}
+
+.terminal__header {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--foreground2);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.terminal__header span {
+  color: var(--accent);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background: var(--accent);
+  color: var(--background0);
+  transform: translateY(-2px);
+}
+
+.prompt {
+  background: rgba(13, 27, 42, 0.85);
+  border: 1px solid rgba(145, 162, 186, 0.35);
+  border-radius: 12px;
+  padding: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--foreground0);
+  margin-top: 2rem;
+  line-height: 1.6;
+}
+
+.prompt strong {
+  color: var(--accent);
+}
+
+.panel-title {
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--foreground2);
+  margin: 0 0 1rem;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.75rem;
+  margin-top: 1.75rem;
+}
+
+.gallery-card {
+  background: rgba(13, 27, 42, 0.92);
+  border: 1px solid rgba(145, 162, 186, 0.35);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(144, 224, 239, 0.45);
+}
+
+.gallery-card__image img {
+  width: 100%;
+  display: block;
+  filter: contrast(108%) saturate(115%);
+}
+
+.gallery-card__body {
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.gallery-card__title {
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.gallery-card__meta {
+  font-size: 0.82rem;
+  color: var(--foreground2);
+  margin: 0;
+}
+
+.gallery-card__cta {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.profile-stack {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: start;
+}
+
+.profile-stack__image {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(145, 162, 186, 0.35);
+  box-shadow: var(--shadow);
+}
+
+.profile-stack__image img {
+  width: 100%;
+  display: block;
+  filter: contrast(108%) saturate(112%);
+}
+
+.profile-stack__bio {
+  display: grid;
+  gap: 1rem;
+}
+
+.muted {
+  color: var(--foreground2);
+  font-size: 0.9rem;
+}
+
+.terminal-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.terminal-list li::before {
+  content: '→';
+  color: var(--accent);
+  display: inline-block;
+  margin-right: 0.75rem;
+}
+
+.empty-state {
+  border: 1px dashed rgba(145, 162, 186, 0.35);
+  border-radius: 12px;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--foreground2);
+  background: rgba(13, 27, 42, 0.6);
+}
+
+footer {
+  margin-top: 4rem;
+  padding: 2.5rem clamp(1.5rem, 4vw, 4rem) 3rem;
+  background: rgba(10, 18, 30, 0.92);
+  border-top: 1px solid rgba(145, 162, 186, 0.35);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer .icons {
+  display: flex;
+  gap: 0.85rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer .icons a {
+  color: var(--foreground2);
+  font-size: 1rem;
+}
+
+footer .icons a:hover {
+  color: var(--accent);
+}
+
+footer p {
+  margin: 0;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--foreground2);
+}
+
+.page-shell {
+  padding: 6rem clamp(1.5rem, 4vw, 4rem);
+}
+
+.page-shell .terminal {
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.page-shell header {
+  margin-bottom: 2rem;
+}
+
+.page-shell h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--highlight);
+}
+
+.page-shell .content {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.blog-list {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.blog-card {
+  border: 1px solid rgba(145, 162, 186, 0.35);
+  border-radius: 16px;
+  background: rgba(13, 27, 42, 0.92);
+  padding: 1.75rem;
+  box-shadow: 0 20px 45px rgba(3, 6, 9, 0.5);
+  display: grid;
+  gap: 0.9rem;
+}
+
+.blog-card h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.blog-card .meta {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--foreground2);
+}
+
+.pagination {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+@media (max-width: 960px) {
+  .webtui-nav {
+    position: static;
+    margin-bottom: -2rem;
+    align-self: flex-end;
+  }
+
+  .webtui-main {
+    padding-top: 4.5rem;
+  }
+
+  .terminal {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  html,
+  body {
+    font-size: 16px;
+  }
+
+  .webtui-main {
+    gap: 3rem;
+    padding: 4.5rem 1.5rem 4rem;
+  }
+
+  .terminal::before {
+    left: 1rem;
+  }
+
+  .profile-stack {
+    grid-template-columns: 1fr;
+  }
+}

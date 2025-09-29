@@ -1,0 +1,35 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog", ({ data }) => data.draft !== true);
+---
+
+<BaseLayout>
+  <main class="page-shell">
+    <div class="terminal space-y-6">
+      <div class="terminal__header">ryan@home<span>/blog</span></div>
+      <header>
+        <h1 class="text-white text-3xl font-black uppercase tracking-tight">Blog</h1>
+        <p class="text-sm text-slate-300">Long-form posts will land here soon.</p>
+      </header>
+      {posts.length === 0 ? (
+        <div class="empty-state bg-white/10">
+          Nothing published yet. I'm keeping posts in draft while I migrate back catalog entries.
+        </div>
+      ) : (
+        <div class="blog-list">
+          {posts.map((post) => (
+            <article class="blog-card">
+              <h2>
+                <a href={post.slug}>{post.data.title}</a>
+              </h2>
+              <div class="meta">{post.data.date.toLocaleDateString()}</div>
+              <p>{post.data.summary}</p>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+const messages = [
+  "florida sunrise",
+  "gallery update",
+  "film scans",
+  "family adventures",
+  "salt water",
+  "cloudflare deploy",
+  "markdown edits",
+  "astro build",
+  "hugging the coast",
+  "ryan mckinnon",
+];
+const marqueeItems = [...messages, ...messages];
+---
+
+<section class="border-white/20 border-y">
+  <div class="marquee-wrapper text-white">
+    <div class="marquee-track font-black tracking-widest uppercase">
+      {marqueeItems.map((msg, index) => (
+        <>
+          <span>{msg}</span>
+          {index !== marqueeItems.length - 1 && (
+            <span aria-hidden="true">✺</span>
+          )}
+        </>
+      ))}
+    </div>
+  </div>
+</section>
