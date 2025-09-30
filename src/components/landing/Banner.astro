@@ -1,16 +1,38 @@
 ---
-const messages = [
-  "florida sunrise",
-  "gallery update",
-  "film scans",
-  "family adventures",
-  "salt water",
-  "cloudflare deploy",
-  "markdown edits",
-  "astro build",
-  "hugging the coast",
-  "ryan mckinnon",
+import { getRecentTracks } from '@/utils/lastfm';
+
+// Fetch recent Last.fm tracks at build time
+const musicTracks = await getRecentTracks(3);
+
+// Static messages: locations, updates, personal
+const staticMessages = [
+  "early tee times",
+  "beach mornings with the kids",
+  "jupiter sunrises",
+  "family weekends",
+  "salt life",
+  "backswing thoughts",
+  "buffett on repeat",
+  "coastal living",
+  "dad jokes included",
 ];
+
+// Mix music tracks with static messages
+const messages = [
+  staticMessages[0],
+  musicTracks[0],
+  staticMessages[1],
+  staticMessages[2],
+  musicTracks[1],
+  staticMessages[3],
+  staticMessages[4],
+  musicTracks[2],
+  staticMessages[5],
+  staticMessages[6],
+  staticMessages[7],
+  staticMessages[8],
+];
+
 const marqueeItems = [...messages, ...messages];
 ---
 

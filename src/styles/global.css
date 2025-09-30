@@ -109,7 +109,7 @@ main {
   align-items: center;
   gap: 1.5rem;
   width: max-content;
-  animation: marquee-scroll 25s linear infinite;
+  animation: marquee-scroll 40s linear infinite;
   text-transform: uppercase;
 }
 
