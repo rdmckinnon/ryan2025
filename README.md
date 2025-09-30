@@ -1,191 +1,200 @@
-# Ryan McKinnon – Astromax Astro Build
+# Ryan McKinnon – Personal Portfolio
 
-  A one-page Astro site styled after the Astromax (https://github.com/michael-andreuzza/astromax) theme,
-  customized for Ryan McKinnon’s photo journal and mixtape notes. It sits alongside the Hugo rebuild so you can
-  compare approaches.
+A one-page Astro site showcasing dad life, golf, coastal photography, and music. Built with the [Astromax](https://github.com/michael-andreuzza/astromax) theme and customized for a modern, lifestyle-focused portfolio.
 
-  ## Project Structure
+## Project Structure
 
-  astro-astromax/
-  ├── astro.config.mjs           # Astro + Tailwind + sitemap config
-  ├── package.json               # npm scripts (dev/build/preview)
-  ├── tsconfig.json              # path aliases (`@/…`) and TS settings
-  ├── public/
-  │   └── images/
-  │       ├── gallery/           # full-resolution originals (keep)
-  │       │   └── web/           # optimized web copies (generated via ImageMagick)
-  │       └── shared/            # profile/home hero images
-  └── src/
-      ├── components/
-      │   ├── BaseHead.astro     # global head tags + fonts + Keen slider CSS
-      │   ├── global/
-      │   │   ├── Navigation.astro
-      │   │   └── Footer.astro
-      │   └── landing/
-      │       ├── Banner.astro          # scrolling ticker
-      │       ├── Hero.astro            # hero headline over gradient grid
-      │       ├── Work.astro            # Keen slider (gallery preview)
-      │       ├── Intro.astro           # “Notes” block
-      │       ├── Music.astro           # “Now Playing” section (pulls markdown posts)
-      │       └── Cta.astro             # email call-to-action banner
-      ├── content/
-      │   ├── blog/                     # Markdown posts (drafted)
-      │   └── config.ts                 # Astro collection schema
-      ├── data/
-      │   └── gallery.ts                # Photo list (slug, title, image path)
-      ├── layouts/
-      │   └── BaseLayout.astro
-      ├── pages/
-      │   ├── index.astro               # Assembles all the landing sections
-      │   ├── gallery/index.astro       # Shuffled gallery grid (image + title)
-      │   ├── about/index.astro         # Simplified about page
-      │   └── blog/index.astro          # Hidden blog page (shows when drafts flipped)
-      └── styles/
-          └── global.css                # Tailwind v4 imports + theme overrides
+```
+astro-astromax/
+├── astro.config.mjs           # Astro + Tailwind + sitemap config
+├── package.json               # npm scripts (dev/build/preview)
+├── tsconfig.json              # path aliases (@/) and TS settings
+├── public/
+│   └── images/
+│       ├── gallery/           # full-resolution originals
+│       │   └── web/           # optimized web copies (ImageMagick)
+│       └── shared/            # profile/hero images
+└── src/
+    ├── components/
+    │   ├── BaseHead.astro
+    │   ├── global/
+    │   │   ├── Navigation.astro
+    │   │   └── Footer.astro
+    │   └── landing/
+    │       ├── Banner.astro          # scrolling ticker with Last.fm
+    │       ├── Hero.astro            # hero headline
+    │       ├── Work.astro            # Keen slider gallery preview
+    │       ├── Intro.astro           # notes block
+    │       ├── Music.astro           # now playing section
+    │       └── Cta.astro             # email CTA
+    ├── content/
+    │   ├── blog/                     # markdown posts
+    │   └── config.ts                 # collection schema
+    ├── data/
+    │   └── gallery.ts                # 287 photos with titles
+    ├── utils/
+    │   └── lastfm.ts                 # Last.fm API integration
+    ├── layouts/
+    │   └── BaseLayout.astro
+    ├── pages/
+    │   ├── index.astro               # landing page
+    │   ├── gallery/index.astro       # randomized photo grid
+    │   ├── about/index.astro
+    │   └── blog/index.astro
+    └── styles/
+        └── global.css                # Tailwind v4 + custom animations
+```
 
-  ## Editing Sections
+## Key Features
 
-  ### Hero
+### 🎵 Last.fm Integration
+- **File:** `src/utils/lastfm.ts` & `src/components/landing/Banner.astro`
+- Fetches your 3 most recent tracks at build time
+- Mixes music with static messages in the scrolling ticker
+- Fallback messages if API fails
+- Set `LASTFM_API_KEY` in `.env` or Cloudflare environment variables
 
-  - File: src/components/landing/Hero.astro
-  - Headline, description, and “highlights” list are hard-coded in the component. Edit the <h1> text or add/remove
-  entries from the highlightItems array.
+### 📸 Gallery with Smart Titles
+- **File:** `src/data/gallery.ts`
+- 287 photos with descriptive titles (auto-generated slugs)
+- Randomized order on each build
+- Categories: golf, beach, sunset, aerial, desert, city
+- View on slider (homepage) and full grid (`/gallery`)
 
-  ### Scrolling Ticker
+### 🎨 Modern Design
+- Dad/family/golf/ocean focused copy
+- Scrolling ticker with Last.fm tracks
+- Keen slider gallery preview
+- Subtle CTA with hover effects
+- Tailwind v4 styling
 
-  - File: src/components/landing/Banner.astro
-  - Edit the messages array to change topics ("florida sunrise", "gallery update", etc.). The ticker is duplicated
-  for seamless scrolling. CSS for animation is in src/styles/global.css (.marquee-wrapper, .marquee-track,
-  @keyframes marquee-scroll).
+## Editing Sections
 
-  ### Gallery Slider (“Recent frames on repeat”)
+### Hero
+**File:** `src/components/landing/Hero.astro`
+- Edit the `<h1>` headline
+- Modify `highlightItems` array for bullet points
 
-  - File: src/components/landing/Work.astro
-  - Uses galleryItems from src/data/gallery.ts. Titles display on an overlay; the array is shuffled each build
-  (const shuffled = [...galleryItems].sort(() => Math.random() - 0.5)).
-  - If you want runtime shuffling (on every reload), replace the .sort with a client-side randomization, otherwise
-  current setup randomizes on build.
+### Scrolling Ticker (with Last.fm)
+**File:** `src/components/landing/Banner.astro`
+- Edit `staticMessages` array for custom messages
+- Last.fm tracks automatically mixed in
+- Animation speed: `global.css` (40s duration)
 
-  ### Gallery Grid (full page)
+### Gallery Slider
+**File:** `src/components/landing/Work.astro`
+- Pulls from `src/data/gallery.ts`
+- Shuffled on build: `[...galleryItems].sort(() => Math.random() - 0.5)`
+- Displays 6 random photos with titles
 
-  - File: src/pages/gallery/index.astro
-  - Also uses a shuffled copy of galleryItems. Each card shows only the image with a title band.
+### Notes Section
+**File:** `src/components/landing/Intro.astro`
+- Update the `<p>` block text
 
-  ### “Notes” text block
+### Now Playing / Music
+**File:** `src/components/landing/Music.astro`
+- Pulls markdown from `src/content/blog/`
+- Filters: `tags: ["music"]` and `draft: false`
+- Shows 3 newest posts
 
-  - File: src/components/landing/Intro.astro
-  - Update the copy inside the two <p> blocks to match new messaging.
+### Call-to-Action
+**File:** `src/components/landing/Cta.astro`
+- Styled card with email link
+- Background color: `#415a77`
+- Edit heading, description, and button text
 
-  ### “Now Playing” / Music section
+### Navigation
+**File:** `src/components/global/Navigation.astro`
+- Edit `navLinks` array for menu items
 
-  - File: src/components/landing/Music.astro
-  - Pulls markdown posts from src/content/blog/ where tags include "music" and draft is false.
-  - View shows up to three newest posts sorted by date.
+### Footer
+**File:** `src/components/global/Footer.astro`
+- Social links from `src/data/social.ts`
 
-  ### Call To Action
+## Managing Gallery Photos
 
-  - File: src/components/landing/Cta.astro
-  - Currently a flat cyan banner linking to mailto:hi@ryanmckinnon.com. Change the text inside the <a> to adjust
-  phrasing.
+### 1. Add Original Photos
+Drop high-res originals into `public/images/gallery/`
 
-  ### Navigation links
+### 2. Optimize with ImageMagick
+Generate web-optimized copies:
+```bash
+cd public/images/gallery
+magick mogrify \
+  -path web \
+  -resize 2000x2000\> \
+  -quality 80 \
+  -strip \
+  *.jpg *.JPG *.jpeg
+```
+- Keeps originals intact
+- Only resizes files larger than 2000px
+- `-strip` removes EXIF (remove flag to keep metadata)
 
-  - File: src/components/global/Navigation.astro
-  - navLinks array defines the anchor order: intro → frames → notes → music → contact. Add new sections by
-  appending to this array and adding the corresponding id to the section.
+### 3. Update Gallery Data
+Add entries to `src/data/gallery.ts`:
+```typescript
+{ title: "Coastal Sunrise", image: "/images/gallery/web/photo.jpg" }
+```
+- **No slug needed** - auto-generated from title
+- Use descriptive 2-4 word titles
+- Examples: "Wave Patterns", "Fairway View", "Desert Vista"
 
-  ### Footer
+## Music Blog Posts
 
-  - File: src/components/global/Footer.astro
-  - Uses orderedSocialKeys from src/data/social.ts. Links default to email/Twitter/Instagram/LinkedIn/RSS. Update
-  the map or add new networks in that data file.
+Create markdown files in `src/content/blog/`:
 
-  ## Managing Gallery Photos
+```markdown
+---
+title: "Track Title"
+date: 2025-01-15
+summary: "One-line description"
+tags: ["music"]
+draft: false
+---
 
-  1. Drop originals into public/images/gallery/.
-  2. Generate optimized copies in public/images/gallery/web/ using ImageMagick:
+Body text with thoughts on the track.
 
-     cd /Users/ryanmckinnon/docker/ryan/astro-astromax/public/images/gallery
-     magick mogrify \
-       -path web \
-       -resize 2000x2000\> \
-       -quality 80 \
-       -strip \
-       *.jpg *.JPG *.jpeg
-      - Keeps originals intact; resizes only files larger than 2000 px.
-      - -strip removes EXIF; drop it if you want to preserve metadata.
-  3. Update src/data/gallery.ts. Since Slugs/titles are auto-generated from filenames by the script above, each
-  entry looks like:
+[Listen on Spotify](https://open.spotify.com/...)
+```
 
-     { slug: "favorites-07", title: "Favorites 07", image: "/images/gallery/web/Favorites - 7 of 16.jpeg" },
+- Set `draft: false` to show in "Now Playing" section
+- Must include `tags: ["music"]` to appear
 
-     Change title to something meaningful (e.g., “Jupiter Pier Sunrise”). If you don’t want to point to the web
-  copy, keep image referencing the original.
+## Development Commands
 
-  ## Music Blog Posts
+```bash
+npm install         # install dependencies
+npm run dev         # dev server at localhost:4321
+npm run build       # production build to dist/
+npm run preview     # preview built output locally
+```
 
-  - Markdown files live in src/content/blog/.
-  - Frontmatter schema (src/content/config.ts) expects:
+## Deploying to Cloudflare Pages
 
-    ---
-    title: "Track Title"
-    date: YYYY-MM-DD
-    summary: "One-line description"
-    tags: ["music"]
-    draft: true
-    ---
-    Body text…
+1. **Push repo to GitHub**
 
-    [Listen on Spotify](https://open.spotify.com/…)
-  - Keep draft: true to hide posts. Flip to false to surface them in the “Now Playing” section and the blog list.
-  - Add the music tag to ensure they’re picked up for the music panel.
+2. **Create Cloudflare Pages project:**
+   - Connect your repository
+   - Build command: `npm run build`
+   - Output directory: `dist`
 
-  ## Blog Page
+3. **Environment Variables:**
+   - Add `LASTFM_API_KEY` under Settings → Environment Variables
 
-  - src/pages/blog/index.astro filters posts where draft !== true.
-  - Until you publish a post, the page shows the placeholder empty state.
+4. **Custom domain:**
+   - Add your domain in Pages settings
+   - Cloudflare handles DNS and HTTPS automatically
 
-  ## Optimizing & Naming Slugs
+### Features
+- ✅ 500 build minutes/month (free tier)
+- ✅ Automatic deployments on push
+- ✅ Preview URLs for branches
+- ✅ Fast global CDN
 
-  - Running magick mogrify … automatically generates smaller files but doesn’t update gallery.ts. To regenerate
-  the data file based on current filenames, run the Python helper in the README’s generate slugs section (already
-  added). It rewrites gallery.ts with slugs/title derived from filenames. After running, fine-tune the titles
-  manually.
+## Tips
 
-  ## Development Commands
-
-  cd /Users/ryanmckinnon/docker/ryan/astro-astromax
-  npm install         # once
-  npm run dev         # start dev server (http://localhost:4321)
-  npm run build       # production build to dist/
-  npm run preview     # serve built output locally
-
-  ## Deploying to Cloudflare Pages (Free Tier)
-
-  1. Push repo to GitHub/GitLab.
-  2. On Cloudflare Dashboard → Pages → Create a project.
-      - Connect your repository.
-      - Build command: npm run build
-      - Output directory: dist
-      - Environment: set NODE_VERSION (optional) or adjust build settings as needed.
-  3. Trigger first deploy. Pages runs npm install then npm run build, serving the dist/ output on every push.
-  4. Optional: Environment Variables. Add ASTRO_SITE or any API keys under Settings → Environment Variables.
-  5. Custom domain: After first deploy, add your domain or subdomain; Cloudflare handles DNS and HTTPS
-  automatically.
-
-  ### Monitoring Builds
-
-  - The free plan includes 500 build minutes/month. Astro builds generally complete in under a minute; you can set
-  budget by limiting push frequency.
-
-  ### Preview Deploys
-
-  - Enable preview deploys (default) to get a unique URL per branch—useful when comparing with the Hugo rebuild.
-
-  ## Tips
-
-  - Image loading: Since you’re using large photos, consider lazy-loading beyond the slider with <img
-  loading="lazy"> (already used).
-  - Video/SVG assets: Place inside public/ and reference via absolute path.
-  - PiP for slider: If transitions stutter, reduce file size (ImageOptim) or adjust Keen slider’s animation
-  duration.
+- **Images:** Already using `loading="lazy"` for performance
+- **Slider performance:** If stuttering, reduce image file size
+- **Last.fm updates:** Rebuild site to fetch latest tracks
+- **Gallery randomization:** Happens at build time, not runtime
