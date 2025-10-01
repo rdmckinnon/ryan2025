@@ -466,7 +466,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       const maxCount = Math.max(...charts.listeningByDay.map((d: any) => d.count), 1);
       const barsHTML = charts.listeningByDay.map((day: any) => {
         const height = Math.max((day.count / maxCount) * 100, 10);
-        return `<div class="activity-bar" style="height: ${height}%" title="${day.date}: ${day.count} scrobbles"></div>`;
+        return `<div class="activity-bar" style="height: ${height}%; min-height: 10px; background: linear-gradient(to top, #90e0ef, #caf0f8);" title="${day.date}: ${day.count} scrobbles"></div>`;
       }).join('');
 
       console.log('Bars HTML length:', barsHTML.length);
@@ -555,7 +555,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
         return `
           <div class="bar-item">
             <div class="bar-fill-container">
-              <div class="bar-fill" style="height: ${height}%" title="${count} plays on ${dayName}"></div>
+              <div class="bar-fill" style="height: ${height}%; min-height: 10px; background: #90e0ef;" title="${count} plays on ${dayName}"></div>
             </div>
             <div class="bar-label">${dayName}</div>
           </div>
