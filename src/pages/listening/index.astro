@@ -1,0 +1,205 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BgGrid from "@/components/assets/BgGrid.astro";
+import { getListeningStats, getAllTimeStats } from "@/utils/d1-client";
+
+const stats = await getListeningStats(30);
+const allTimeStats = await getAllTimeStats();
+
+// Format date helper
+const formatDate = (timestamp: number) => {
+  return new Date(timestamp * 1000).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+};
+
+// Format relative time
+const formatRelativeTime = (timestamp: number) => {
+  const now = Date.now() / 1000;
+  const diff = now - timestamp;
+  const minutes = Math.floor(diff / 60);
+  const hours = Math.floor(diff / 3600);
+  const days = Math.floor(diff / 86400);
+
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  return `${days}d ago`;
+};
+
+// Calculate days of listening history
+const daysListening = allTimeStats.firstScrobble
+  ? Math.floor((Date.now() / 1000 - allTimeStats.firstScrobble) / 86400)
+  : 0;
+---
+
+<BaseLayout>
+  <section id="listening" class="border-white/20 border-b divide-y divide-white/20">
+    <!-- Header -->
+    <div class="p-8 relative">
+      <BgGrid />
+      <h1 class="text-white tracking-tighter font-black uppercase text-3xl lg:text-8xl relative">
+        Listening Habits
+      </h1>
+    </div>
+
+    <!-- Subtitle -->
+    <div class="p-8">
+      <p class="text-white font-black uppercase tracking-tight lg:text-3xl text-xl">
+        What's been on repeat lately
+      </p>
+    </div>
+
+    <!-- All-Time Stats -->
+    {allTimeStats.totalScrobbles > 0 && (
+      <div class="p-8">
+        <h2 class="text-white font-black uppercase text-xl mb-6">All-Time Stats</h2>
+        <div class="grid gap-6 md:grid-cols-3">
+          <div class="border border-white/10 p-6">
+            <div class="text-4xl font-black text-cyan-300 mb-2">
+              {allTimeStats.totalScrobbles.toLocaleString()}
+            </div>
+            <div class="text-sm text-slate-300 uppercase tracking-wider">Total Scrobbles</div>
+          </div>
+          <div class="border border-white/10 p-6">
+            <div class="text-4xl font-black text-cyan-300 mb-2">
+              {daysListening.toLocaleString()}
+            </div>
+            <div class="text-sm text-slate-300 uppercase tracking-wider">Days Listening</div>
+          </div>
+          {allTimeStats.topArtist && (
+            <div class="border border-white/10 p-6">
+              <div class="text-2xl font-black text-cyan-300 mb-2 truncate">
+                {allTimeStats.topArtist.name}
+              </div>
+              <div class="text-sm text-slate-300 uppercase tracking-wider">
+                Top Artist ({allTimeStats.topArtist.play_count} plays)
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    <!-- Last 30 Days Stats -->
+    <div class="p-8">
+      <h2 class="text-white font-black uppercase text-xl mb-6">Last 30 Days</h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="border border-white/10 p-6">
+          <div class="text-4xl font-black text-white mb-2">
+            {stats.totalScrobbles.toLocaleString()}
+          </div>
+          <div class="text-sm text-slate-300 uppercase tracking-wider">Scrobbles</div>
+        </div>
+        <div class="border border-white/10 p-6">
+          <div class="text-4xl font-black text-white mb-2">
+            {stats.uniqueTracks.toLocaleString()}
+          </div>
+          <div class="text-sm text-slate-300 uppercase tracking-wider">Unique Tracks</div>
+        </div>
+        <div class="border border-white/10 p-6">
+          <div class="text-4xl font-black text-white mb-2">
+            {stats.uniqueArtists.toLocaleString()}
+          </div>
+          <div class="text-sm text-slate-300 uppercase tracking-wider">Unique Artists</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Artists -->
+    {stats.topArtists.length > 0 && (
+      <div class="p-8">
+        <h2 class="text-white font-black uppercase text-xl mb-6">Top Artists (30 Days)</h2>
+        <div class="space-y-3">
+          {stats.topArtists.map((artist, index) => (
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+              <div class="flex items-center gap-4">
+                <div class="text-2xl font-black text-slate-500 w-8">
+                  {index + 1}
+                </div>
+                <div>
+                  <div class="text-lg font-bold text-white uppercase tracking-tight">
+                    {artist.name}
+                  </div>
+                  <div class="text-xs text-slate-400 uppercase tracking-wider">
+                    {artist.play_count} plays
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Top Tracks -->
+    {stats.topTracks.length > 0 && (
+      <div class="p-8">
+        <h2 class="text-white font-black uppercase text-xl mb-6">Top Tracks (30 Days)</h2>
+        <div class="space-y-3">
+          {stats.topTracks.map((track, index) => (
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+              <div class="flex items-center gap-4">
+                <div class="text-2xl font-black text-slate-500 w-8">
+                  {index + 1}
+                </div>
+                <div>
+                  <div class="text-lg font-bold text-white uppercase tracking-tight">
+                    {track.name}
+                  </div>
+                  <div class="text-sm text-slate-300">
+                    {track.artist_name}
+                  </div>
+                  <div class="text-xs text-slate-400 uppercase tracking-wider">
+                    {track.play_count} plays
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Recent Scrobbles -->
+    {stats.recentScrobbles.length > 0 && (
+      <div class="p-8">
+        <h2 class="text-white font-black uppercase text-xl mb-6">Recently Played</h2>
+        <div class="space-y-2">
+          {stats.recentScrobbles.map((scrobble) => (
+            <div class="flex items-center justify-between border-b border-white/10 pb-2 text-sm">
+              <div>
+                <div class="text-white font-bold">
+                  {scrobble.track_name}
+                </div>
+                <div class="text-slate-400">
+                  {scrobble.artist_name}
+                </div>
+              </div>
+              <div class="text-slate-500 text-xs uppercase tracking-wider">
+                {formatRelativeTime(scrobble.played_at)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Empty State -->
+    {stats.totalScrobbles === 0 && (
+      <div class="p-8">
+        <div class="border border-white/10 p-12 text-center">
+          <p class="text-slate-300 text-lg mb-4">
+            No listening data yet. Import your CSV or sync with Last.fm to see your stats!
+          </p>
+          <div class="text-sm text-slate-400">
+            <p>Run these commands to get started:</p>
+            <code class="block mt-2 text-cyan-300">npx tsx scripts/import-csv.ts your-data.csv</code>
+            <code class="block mt-1 text-cyan-300">npx tsx scripts/sync-lastfm.ts</code>
+          </div>
+        </div>
+      </div>
+    )}
+  </section>
+</BaseLayout>

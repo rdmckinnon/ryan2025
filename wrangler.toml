@@ -1,0 +1,7 @@
+name = "ryan-personal-site"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "listening-habits"
+database_id = "YOUR_DATABASE_ID"  # Replace with actual ID after creating database
