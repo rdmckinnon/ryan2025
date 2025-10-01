@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import BgGrid from "@/components/assets/BgGrid.astro";
+import { ChartsContainer } from "@/components/charts/ChartsContainer";
 ---
 
 <BaseLayout>
@@ -36,7 +37,9 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       <div class="p-8" id="last-30-stats"></div>
 
       <!-- Charts Section -->
-      <div class="p-8" id="charts-section"></div>
+      <div class="p-8" id="charts-section">
+        <ChartsContainer client:load />
+      </div>
 
       <!-- Top Artists -->
       <div class="p-8" id="top-artists"></div>
@@ -313,7 +316,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       document.getElementById('stats-container')!.style.display = 'block';
 
       renderStats(data);
-      renderCharts(data);
+      // Charts now rendered by React component
     } catch (error) {
       console.error('Error loading stats:', error);
       document.getElementById('loading')!.style.display = 'none';
