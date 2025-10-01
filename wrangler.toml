@@ -1,7 +1,8 @@
 name = "ryan-personal-site"
 compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "listening-habits"
-database_id = "440029bd-46f8-4f20-b484-a53f880f33e6"  # Replace with actual ID after creating database
+database_id = "440029bd-46f8-4f20-b484-a53f880f33e6"
