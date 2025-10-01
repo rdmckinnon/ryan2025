@@ -3,9 +3,9 @@
  * Queries listening data from D1 at build time
  */
 
-const D1_DATABASE_ID = import.meta.env.D1_DATABASE_ID;
-const CLOUDFLARE_ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
-const CLOUDFLARE_API_TOKEN = import.meta.env.CLOUDFLARE_API_TOKEN;
+const D1_DATABASE_ID = import.meta.env.D1_DATABASE_ID || import.meta.env.PUBLIC_D1_DATABASE_ID;
+const CLOUDFLARE_ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID || import.meta.env.PUBLIC_CLOUDFLARE_ACCOUNT_ID;
+const CLOUDFLARE_API_TOKEN = import.meta.env.CLOUDFLARE_API_TOKEN || import.meta.env.PUBLIC_CLOUDFLARE_API_TOKEN;
 
 export interface Artist {
   id: number;
