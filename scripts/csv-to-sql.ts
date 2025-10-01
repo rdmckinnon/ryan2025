@@ -13,14 +13,26 @@ interface CSVRow {
 }
 
 function parseTimestamp(timestampStr: string): number {
+  // Try parsing as unix timestamp first (should be 10 digits for seconds)
+  const unixTimestamp = parseInt(timestampStr);
+  if (!isNaN(unixTimestamp)) {
+    // If it's already in seconds (10 digits), use it directly
+    if (unixTimestamp > 1000000000 && unixTimestamp < 2000000000) {
+      return unixTimestamp;
+    }
+    // If it's in milliseconds (13 digits), convert to seconds
+    if (unixTimestamp > 10000000000) {
+      return Math.floor(unixTimestamp / 1000);
+    }
+  }
+
+  // Try parsing as ISO date
   const isoDate = new Date(timestampStr);
   if (!isNaN(isoDate.getTime())) {
     return Math.floor(isoDate.getTime() / 1000);
   }
-  const unixTimestamp = parseInt(timestampStr);
-  if (!isNaN(unixTimestamp)) {
-    return unixTimestamp > 10000000000 ? Math.floor(unixTimestamp / 1000) : unixTimestamp;
-  }
+
+  console.error(`Warning: Could not parse timestamp: ${timestampStr}, using current time`);
   return Math.floor(Date.now() / 1000);
 }
 
@@ -30,12 +42,20 @@ function escapeSQL(str: string): string {
 
 function parseCSV(csvContent: string): CSVRow[] {
   const lines = csvContent.trim().split('\n');
-  const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
+  const headers = lines[0].toLowerCase().split(',').map(h => h.trim().replace(/^["']|["']$/g, ''));
 
-  const artistIndex = headers.findIndex(h => h.includes('artist') || h.includes('artistname'));
-  const trackIndex = headers.findIndex(h => h.includes('track') || h.includes('song') || h.includes('name'));
-  const albumIndex = headers.findIndex(h => h.includes('album'));
-  const timestampIndex = headers.findIndex(h => h.includes('time') || h.includes('date') || h.includes('played'));
+  console.error('Detected headers:', headers);
+
+  // Find artist column (not artist_mbid)
+  const artistIndex = headers.findIndex(h => h === 'artist');
+  // Find track column (not track_mbid)
+  const trackIndex = headers.findIndex(h => h === 'track');
+  // Find album column (not album_mbid)
+  const albumIndex = headers.findIndex(h => h === 'album');
+  // Find timestamp column (prefer uts over utc_time)
+  const timestampIndex = headers.findIndex(h => h === 'uts' || h === 'utc_time' || h.includes('time'));
+
+  console.error(`Column indexes - artist: ${artistIndex}, track: ${trackIndex}, album: ${albumIndex}, timestamp: ${timestampIndex}`);
 
   if (artistIndex === -1 || trackIndex === -1 || timestampIndex === -1) {
     throw new Error(`Could not detect required columns. Found headers: ${headers.join(', ')}`);
@@ -47,14 +67,32 @@ function parseCSV(csvContent: string): CSVRow[] {
     const line = lines[i].trim();
     if (!line) continue;
 
-    const values = line.split(',').map(v => v.trim().replace(/^["']|["']$/g, ''));
+    // Split by comma but respect quoted values
+    const values: string[] = [];
+    let currentValue = '';
+    let insideQuotes = false;
 
-    rows.push({
-      artist: values[artistIndex],
-      track: values[trackIndex],
-      album: albumIndex >= 0 ? values[albumIndex] : undefined,
-      timestamp: values[timestampIndex],
-    });
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j];
+      if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else if (char === ',' && !insideQuotes) {
+        values.push(currentValue.trim().replace(/^["']|["']$/g, ''));
+        currentValue = '';
+      } else {
+        currentValue += char;
+      }
+    }
+    values.push(currentValue.trim().replace(/^["']|["']$/g, ''));
+
+    if (values[artistIndex] && values[trackIndex]) {
+      rows.push({
+        artist: values[artistIndex],
+        track: values[trackIndex],
+        album: albumIndex >= 0 ? values[albumIndex] : undefined,
+        timestamp: values[timestampIndex],
+      });
+    }
   }
 
   return rows;

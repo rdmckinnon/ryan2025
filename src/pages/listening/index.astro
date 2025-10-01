@@ -27,13 +27,16 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       </div>
     </div>
 
-    <!-- Content Container (will be populated by JavaScript) -->
+    <!-- Content Container -->
     <div id="stats-container" style="display: none;">
       <!-- All-Time Stats -->
       <div class="p-8" id="all-time-stats"></div>
 
       <!-- Last 30 Days Stats -->
       <div class="p-8" id="last-30-stats"></div>
+
+      <!-- Charts Section -->
+      <div class="p-8" id="charts-section"></div>
 
       <!-- Top Artists -->
       <div class="p-8" id="top-artists"></div>
@@ -56,6 +59,243 @@ import BgGrid from "@/components/assets/BgGrid.astro";
   </section>
 </BaseLayout>
 
+<style>
+  :root {
+    --accent: #90e0ef;
+    --highlight: #caf0f8;
+    --foreground0: #e0e1dd;
+    --foreground1: #c5d0e4;
+    --foreground2: #91a2ba;
+    --background1: #1b263b;
+  }
+
+  /* Activity Chart */
+  .activity-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 200px;
+    gap: 2px;
+    padding: 1rem 0;
+    overflow-x: auto;
+  }
+
+  .activity-bar {
+    flex: 1;
+    min-width: 4px;
+    background: linear-gradient(to top, var(--accent), var(--highlight));
+    border-radius: 2px 2px 0 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .activity-bar:hover {
+    background: var(--highlight);
+    opacity: 0.8;
+  }
+
+  /* Diversity Pie Chart */
+  .diversity-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .pie-chart {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .pie-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--background1);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .pie-percent {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--accent);
+  }
+
+  .pie-label {
+    font-size: 0.7rem;
+    color: var(--foreground2);
+    text-transform: uppercase;
+    margin-top: 0.25rem;
+  }
+
+  .pie-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .legend-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+  }
+
+  .legend-text-label {
+    font-size: 0.9rem;
+    color: var(--foreground0);
+    font-weight: 600;
+  }
+
+  .legend-text-value {
+    font-size: 0.75rem;
+    color: var(--foreground2);
+  }
+
+  /* Streak Cards */
+  .streak-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .streak-card {
+    background: rgba(144, 224, 239, 0.05);
+    border: 1px solid rgba(144, 224, 239, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .streak-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .streak-label {
+    font-size: 0.8rem;
+    color: var(--foreground2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+  }
+
+  /* Hour/Day Charts */
+  .bar-chart {
+    display: grid;
+    gap: 4px;
+    padding: 1rem 0;
+  }
+
+  .bar-chart.hours {
+    grid-template-columns: repeat(24, 1fr);
+  }
+
+  .bar-chart.days {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .bar-fill-container {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .bar-fill {
+    width: 100%;
+    background: var(--accent);
+    border-radius: 4px 4px 0 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .bar-fill:hover {
+    background: var(--highlight);
+  }
+
+  .bar-label {
+    font-size: 0.65rem;
+    color: var(--foreground2);
+    text-transform: uppercase;
+  }
+
+  /* Decade Chart */
+  .decade-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .decade-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .decade-label {
+    min-width: 100px;
+    font-size: 0.9rem;
+    color: var(--foreground1);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .decade-bar-container {
+    flex: 1;
+    height: 36px;
+    background: rgba(145, 162, 186, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .decade-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--highlight));
+    border-radius: 6px;
+    transition: width 0.8s ease;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    justify-content: flex-end;
+  }
+
+  .decade-count {
+    font-size: 0.8rem;
+    color: white;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+</style>
+
 <script>
   async function loadStats() {
     try {
@@ -68,6 +308,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       document.getElementById('stats-container')!.style.display = 'block';
 
       renderStats(data);
+      renderCharts(data);
     } catch (error) {
       console.error('Error loading stats:', error);
       document.getElementById('loading')!.style.display = 'none';
@@ -80,7 +321,10 @@ import BgGrid from "@/components/assets/BgGrid.astro";
 
     // All-Time Stats
     if (allTime.totalScrobbles > 0) {
-      const daysListening = Math.floor((Date.now() / 1000 - 1609459200) / 86400); // Rough estimate
+      const daysListening = allTime.oldestScrobble
+        ? Math.floor((Date.now() / 1000 - allTime.oldestScrobble) / 86400)
+        : 0;
+
       document.getElementById('all-time-stats')!.innerHTML = `
         <h2 class="text-white font-black uppercase text-xl mb-6">All-Time Stats</h2>
         <div class="grid gap-6 md:grid-cols-3">
@@ -102,7 +346,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
                 ${allTime.topArtist.name}
               </div>
               <div class="text-sm text-slate-300 uppercase tracking-wider">
-                Top Artist (${allTime.topArtist.play_count} plays)
+                Top Artist (${allTime.topArtist.play_count.toLocaleString()} plays)
               </div>
             </div>
           ` : ''}
@@ -205,6 +449,170 @@ import BgGrid from "@/components/assets/BgGrid.astro";
         <div class="space-y-2">${scrobblesHTML}</div>
       `;
     }
+  }
+
+  function renderCharts(data: any) {
+    const { charts, allTime } = data;
+    let chartsHTML = '<h2 class="text-white font-black uppercase text-2xl mb-8">Listening Patterns</h2>';
+
+    // 1. Activity Over Time (Last 90 Days)
+    if (charts.listeningByDay && charts.listeningByDay.length > 0) {
+      const maxCount = Math.max(...charts.listeningByDay.map((d: any) => d.count));
+      const barsHTML = charts.listeningByDay.map((day: any) => {
+        const height = (day.count / maxCount) * 100;
+        return `<div class="activity-bar" style="height: ${height}%" title="${day.date}: ${day.count} scrobbles"></div>`;
+      }).join('');
+
+      chartsHTML += `
+        <div class="mb-12">
+          <h3 class="text-white font-bold uppercase text-lg mb-4">Daily Activity (Last 90 Days)</h3>
+          <div class="activity-chart">${barsHTML}</div>
+          <div class="text-xs text-slate-400 text-center mt-2">Hover over bars for details</div>
+        </div>
+      `;
+    }
+
+    // 2. Artist Diversity
+    if (charts.artistDiversity) {
+      const { top10_plays, other_plays } = charts.artistDiversity;
+      const total = top10_plays + other_plays;
+      const top10Percent = total > 0 ? (top10_plays / total * 100).toFixed(1) : 0;
+
+      chartsHTML += `
+        <div class="mb-12">
+          <h3 class="text-white font-bold uppercase text-lg mb-4">Artist Diversity</h3>
+          <div class="diversity-container">
+            <div class="pie-chart" style="background: conic-gradient(#90e0ef 0% ${top10Percent}%, #91a2ba ${top10Percent}% 100%);">
+              <div class="pie-center">
+                <div class="pie-percent">${top10Percent}%</div>
+                <div class="pie-label">Top 10</div>
+              </div>
+            </div>
+            <div class="pie-legend">
+              <div class="legend-item">
+                <div class="legend-color" style="background: #90e0ef;"></div>
+                <div>
+                  <div class="legend-text-label">Top 10 Artists</div>
+                  <div class="legend-text-value">${top10_plays.toLocaleString()} plays</div>
+                </div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color" style="background: #91a2ba;"></div>
+                <div>
+                  <div class="legend-text-label">All Other Artists</div>
+                  <div class="legend-text-value">${other_plays.toLocaleString()} plays</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 3. Listening Streaks
+    if (allTime.oldestScrobble) {
+      const daysListening = Math.floor((Date.now() / 1000 - allTime.oldestScrobble) / 86400);
+      const yearsListening = (daysListening / 365).toFixed(1);
+
+      chartsHTML += `
+        <div class="mb-12">
+          <h3 class="text-white font-bold uppercase text-lg mb-4">Listening Journey</h3>
+          <div class="streak-container">
+            <div class="streak-card">
+              <div class="streak-number">${daysListening.toLocaleString()}</div>
+              <div class="streak-label">Days Tracking</div>
+            </div>
+            <div class="streak-card">
+              <div class="streak-number">${yearsListening}</div>
+              <div class="streak-label">Years of Data</div>
+            </div>
+            <div class="streak-card">
+              <div class="streak-number">${Math.floor(allTime.totalScrobbles / daysListening)}</div>
+              <div class="streak-label">Avg Plays/Day</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 4. Listening by Hour
+    if (charts.listeningByHour && charts.listeningByHour.length > 0) {
+      const maxHourCount = Math.max(...charts.listeningByHour.map((h: any) => h.count));
+      const hoursHTML = Array.from({ length: 24 }, (_, i) => {
+        const hourData = charts.listeningByHour.find((h: any) => h.hour === i);
+        const count = hourData?.count || 0;
+        const height = maxHourCount > 0 ? (count / maxHourCount) * 100 : 0;
+        return `
+          <div class="bar-item">
+            <div class="bar-fill-container">
+              <div class="bar-fill" style="height: ${height}%" title="${count} plays at ${i}:00"></div>
+            </div>
+            <div class="bar-label">${i}</div>
+          </div>
+        `;
+      }).join('');
+
+      chartsHTML += `
+        <div class="mb-12">
+          <h3 class="text-white font-bold uppercase text-lg mb-4">Listening by Hour of Day</h3>
+          <div class="bar-chart hours">${hoursHTML}</div>
+        </div>
+      `;
+    }
+
+    // 5. Listening by Day of Week
+    if (charts.listeningByDayOfWeek && charts.listeningByDayOfWeek.length > 0) {
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const maxDayCount = Math.max(...charts.listeningByDayOfWeek.map((d: any) => d.count));
+      const daysHTML = days.map((dayName, i) => {
+        const dayData = charts.listeningByDayOfWeek.find((d: any) => d.day === i);
+        const count = dayData?.count || 0;
+        const height = maxDayCount > 0 ? (count / maxDayCount) * 100 : 0;
+        return `
+          <div class="bar-item">
+            <div class="bar-fill-container">
+              <div class="bar-fill" style="height: ${height}%" title="${count} plays on ${dayName}"></div>
+            </div>
+            <div class="bar-label">${dayName}</div>
+          </div>
+        `;
+      }).join('');
+
+      chartsHTML += `
+        <div class="mb-12">
+          <h3 class="text-white font-black uppercase text-lg mb-4">Listening by Day of Week</h3>
+          <div class="bar-chart days">${daysHTML}</div>
+        </div>
+      `;
+    }
+
+    // 6. Listening by Decade
+    if (charts.listeningByDecade && charts.listeningByDecade.length > 0) {
+      const maxDecadeCount = Math.max(...charts.listeningByDecade.map((d: any) => d.count));
+      const decadesHTML = charts.listeningByDecade.map((decade: any) => {
+        const width = (decade.count / maxDecadeCount) * 100;
+        return `
+          <div class="decade-row">
+            <div class="decade-label">${decade.decade}</div>
+            <div class="decade-bar-container">
+              <div class="decade-bar-fill" style="width: ${width}%">
+                <span class="decade-count">${decade.count.toLocaleString()} plays</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      chartsHTML += `
+        <div class="mb-12">
+          <h3 class="text-white font-black uppercase text-lg mb-4">Listening by Era</h3>
+          <div class="decade-chart">${decadesHTML}</div>
+          <div class="text-xs text-slate-400 mt-2">* Based on when you listened (approximation)</div>
+        </div>
+      `;
+    }
+
+    document.getElementById('charts-section')!.innerHTML = chartsHTML;
   }
 
   loadStats();
