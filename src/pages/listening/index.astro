@@ -74,8 +74,8 @@ import BgGrid from "@/components/assets/BgGrid.astro";
     display: flex;
     align-items: flex-end;
     height: 200px;
-    gap: 2px;
-    padding: 1rem 0;
+    gap: 4px;
+    padding: 1rem;
     overflow-x: auto;
     background: rgba(145, 162, 186, 0.05);
     border-radius: 8px;
@@ -83,10 +83,11 @@ import BgGrid from "@/components/assets/BgGrid.astro";
 
   .activity-bar {
     flex: 1;
-    min-width: 8px;
+    min-width: 12px;
+    max-width: 20px;
     min-height: 10px;
     background: linear-gradient(to top, var(--accent), var(--highlight));
-    border-radius: 2px 2px 0 0;
+    border-radius: 3px 3px 0 0;
     transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
@@ -472,10 +473,18 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       console.log('Bars HTML length:', barsHTML.length);
       console.log('Sample bar:', barsHTML.substring(0, 200));
 
+      // Only show last 30 days for cleaner visualization
+      const last30Days = charts.listeningByDay.slice(-30);
+      const maxCount30 = Math.max(...last30Days.map((d: any) => d.count), 1);
+      const bars30HTML = last30Days.map((day: any) => {
+        const height = Math.max((day.count / maxCount30) * 100, 10);
+        return `<div class="activity-bar" style="height: ${height}%; min-height: 10px; background: linear-gradient(to top, #90e0ef, #caf0f8);" title="${day.date}: ${day.count} scrobbles"></div>`;
+      }).join('');
+
       chartsHTML += `
         <div class="mb-12">
-          <h3 class="text-white font-bold uppercase text-lg mb-4">Daily Activity (Last 90 Days)</h3>
-          <div class="activity-chart" id="daily-activity-chart">${barsHTML}</div>
+          <h3 class="text-white font-bold uppercase text-lg mb-4">Daily Activity (Last 30 Days)</h3>
+          <div class="activity-chart" id="daily-activity-chart">${bars30HTML}</div>
           <div class="text-xs text-slate-400 text-center mt-2">Hover over bars for details</div>
         </div>
       `;
