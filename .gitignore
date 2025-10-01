@@ -8,3 +8,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+
+# Wrangler local D1 database
+.wrangler/
+
+# CSV data files (keep cleaned version private)
+data/
+*.csv
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
