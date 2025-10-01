@@ -83,8 +83,8 @@ import BgGrid from "@/components/assets/BgGrid.astro";
 
   .activity-bar {
     flex: 1;
-    min-width: 4px;
-    min-height: 2px;
+    min-width: 8px;
+    min-height: 10px;
     background: linear-gradient(to top, var(--accent), var(--highlight));
     border-radius: 2px 2px 0 0;
     transition: all 0.3s ease;
@@ -233,7 +233,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
 
   .bar-fill {
     width: 100%;
-    min-height: 2px;
+    min-height: 10px;
     background: var(--accent);
     border-radius: 4px 4px 0 0;
     transition: all 0.3s ease;
@@ -465,9 +465,12 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       console.log('Daily activity data:', charts.listeningByDay);
       const maxCount = Math.max(...charts.listeningByDay.map((d: any) => d.count), 1);
       const barsHTML = charts.listeningByDay.map((day: any) => {
-        const height = Math.max((day.count / maxCount) * 100, 3);
+        const height = Math.max((day.count / maxCount) * 100, 10);
         return `<div class="activity-bar" style="height: ${height}%" title="${day.date}: ${day.count} scrobbles"></div>`;
       }).join('');
+
+      console.log('Bars HTML length:', barsHTML.length);
+      console.log('Sample bar:', barsHTML.substring(0, 200));
 
       chartsHTML += `
         <div class="mb-12">
@@ -548,7 +551,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       const daysHTML = days.map((dayName, i) => {
         const dayData = charts.listeningByDayOfWeek.find((d: any) => d.day === i);
         const count = dayData?.count || 0;
-        const height = Math.max(maxDayCount > 0 ? (count / maxDayCount) * 100 : 0, count > 0 ? 5 : 0);
+        const height = Math.max(maxDayCount > 0 ? (count / maxDayCount) * 100 : 0, count > 0 ? 15 : 0);
         return `
           <div class="bar-item">
             <div class="bar-fill-container">
