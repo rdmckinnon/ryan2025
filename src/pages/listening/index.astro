@@ -539,32 +539,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       `;
     }
 
-    // 4. Listening by Hour
-    if (charts.listeningByHour && charts.listeningByHour.length > 0) {
-      const maxHourCount = Math.max(...charts.listeningByHour.map((h: any) => h.count), 1);
-      const hoursHTML = Array.from({ length: 24 }, (_, i) => {
-        const hourData = charts.listeningByHour.find((h: any) => h.hour === i);
-        const count = hourData?.count || 0;
-        const height = Math.max(maxHourCount > 0 ? (count / maxHourCount) * 100 : 0, count > 0 ? 2 : 0);
-        return `
-          <div class="bar-item">
-            <div class="bar-fill-container">
-              <div class="bar-fill" style="height: ${height}%" title="${count} plays at ${i}:00"></div>
-            </div>
-            <div class="bar-label">${i}</div>
-          </div>
-        `;
-      }).join('');
-
-      chartsHTML += `
-        <div class="mb-12">
-          <h3 class="text-white font-bold uppercase text-lg mb-4">Listening by Hour of Day</h3>
-          <div class="bar-chart hours">${hoursHTML}</div>
-        </div>
-      `;
-    }
-
-    // 5. Listening by Day of Week
+    // 4. Listening by Day of Week
     if (charts.listeningByDayOfWeek && charts.listeningByDayOfWeek.length > 0) {
       const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       const maxDayCount = Math.max(...charts.listeningByDayOfWeek.map((d: any) => d.count), 1);
@@ -590,7 +565,7 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       `;
     }
 
-    // 6. Listening by Decade
+    // 5. Listening by Decade
     if (charts.listeningByDecade && charts.listeningByDecade.length > 0) {
       const maxDecadeCount = Math.max(...charts.listeningByDecade.map((d: any) => d.count));
       const decadesHTML = charts.listeningByDecade.map((decade: any) => {
