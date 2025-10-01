@@ -1,38 +1,43 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import BgGrid from "@/components/assets/BgGrid.astro";
 ---
 
 <BaseLayout>
-  <main class="page-shell">
-    <div class="terminal space-y-6">
-      <div class="terminal__header">ryan@home<span>/about</span></div>
-      <header>
-        <h1 class="text-white text-3xl font-black uppercase tracking-tight">About</h1>
-        <p class="text-sm text-slate-300">Dad, golfer, coastal photographer, music enthusiast.</p>
-      </header>
-      <div class="grid gap-10 rounded-2xl border border-white/10 bg-white/5 p-10 backdrop-blur lg:grid-cols-2">
-        <div class="relative overflow-hidden rounded-xl border border-white/10">
-          <img src="/images/shared/profile.jpg" alt="Portrait of Ryan" class="h-full w-full object-cover" />
-        </div>
-        <div class="space-y-5 text-sm text-slate-200">
-          <p>
-            Hi, I'm Ryan. Dad life keeps me busy, but you'll usually find me on the golf course, chasing sunrises along the Florida coast, or hunting for the perfect shot with my drone. This site is where I share moments from family adventures, coastal escapes, and whatever's on repeat in my headphones.
-          </p>
-          <p>
-            When I'm not behind the camera, I'm planning the next round, exploring Jupiter's beaches with the kids, or fine-tuning playlists for the drive to the range.
-          </p>
-          <ul class="space-y-3 text-sm text-slate-300">
-            <li><span class="font-semibold text-white">Golf:</span> Early tee times, backswing thoughts, and fairway mornings.</li>
-            <li><span class="font-semibold text-white">Photography:</span> Coastal aerials, beach textures, and golden hour captures.</li>
-            <li><span class="font-semibold text-white">Music:</span> From the drive to the range to late-night listening—always evolving.</li>
-            <li><span class="font-semibold text-white">Family:</span> Beach weekends, dad jokes, and making memories with the kids.</li>
-          </ul>
-          <p>
-            Want to talk golf, music, or life? Drop me a line at
-            <a class="text-cyan-300 hover:text-cyan-400 transition-colors" href="mailto:hi@ryanmckinnon.com">hi@ryanmckinnon.com</a>.
-          </p>
-        </div>
+  <section id="about" class="border-white/20 border-b divide-y divide-white/20">
+    <div class="p-8 relative">
+      <BgGrid />
+      <h1 class="text-white tracking-tighter font-black uppercase text-3xl lg:text-8xl relative">
+        About
+      </h1>
+    </div>
+    <div class="p-8">
+      <p class="text-white font-black uppercase tracking-tight lg:text-3xl text-xl mb-8">
+        Dad, golfer, coastal photographer, music enthusiast.
+      </p>
+    </div>
+    <div class="p-8 grid gap-10 lg:grid-cols-2">
+      <div class="relative overflow-hidden">
+        <img src="/images/shared/profile.jpg" alt="Portrait of Ryan" class="h-full w-full object-cover" />
+      </div>
+      <div class="space-y-5 text-sm text-slate-200">
+        <p>
+          Hi, I'm Ryan. Dad life keeps me busy, but you'll usually find me on the golf course, chasing sunrises along the Florida coast, or hunting for the perfect shot with my drone. This site is where I share moments from family adventures, coastal escapes, and whatever's on repeat in my headphones.
+        </p>
+        <p>
+          When I'm not behind the camera, I'm planning the next round, exploring Jupiter's beaches with the kids, or fine-tuning playlists for the drive to the range.
+        </p>
+        <ul class="space-y-3 text-sm text-slate-300">
+          <li><span class="font-semibold text-white">Golf:</span> Early tee times, backswing thoughts, and fairway mornings.</li>
+          <li><span class="font-semibold text-white">Photography:</span> Coastal aerials, beach textures, and golden hour captures.</li>
+          <li><span class="font-semibold text-white">Music:</span> From the drive to the range to late-night listening—always evolving.</li>
+          <li><span class="font-semibold text-white">Family:</span> Beach weekends, dad jokes, and making memories with the kids.</li>
+        </ul>
+        <p>
+          Want to talk golf, music, or life? Drop me a line at
+          <a class="text-cyan-300 hover:text-cyan-400 transition-colors" href="mailto:hi@ryanmckinnon.com">hi@ryanmckinnon.com</a>.
+        </p>
       </div>
     </div>
-  </main>
+  </section>
 </BaseLayout>

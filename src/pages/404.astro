@@ -1,0 +1,67 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BgGrid from "@/components/assets/BgGrid.astro";
+
+const lostQuotes = [
+  "Like a ball in the woods on the back nine.",
+  "More lost than my slice on hole 7.",
+  "Went searching for birdies, found a 404 instead.",
+  "This page is out of bounds.",
+  "Taking an unplayable lie on this one.",
+  "Like my driver—way off course.",
+];
+
+const randomQuote = lostQuotes[Math.floor(Math.random() * lostQuotes.length)];
+---
+
+<BaseLayout>
+  <section id="lost" class="border-white/20 border-b divide-y divide-white/20">
+    <div class="p-8 relative">
+      <BgGrid />
+      <h1 class="text-white tracking-tighter font-black uppercase text-3xl lg:text-8xl relative">
+        404
+      </h1>
+    </div>
+    <div class="p-8">
+      <p class="text-white font-black uppercase tracking-tight lg:text-5xl text-2xl mb-4">
+        Page Not Found
+      </p>
+      <p class="text-slate-300 text-lg italic mb-8">
+        {randomQuote}
+      </p>
+    </div>
+    <div class="p-8">
+      <div class="space-y-6">
+        <p class="text-slate-200">
+          Looks like you've wandered off the fairway. This page doesn't exist—maybe it never did,
+          or maybe I accidentally deleted it while updating the scorecard.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a
+            href="/"
+            class="inline-flex items-center px-6 py-3 border border-white/20 text-white uppercase tracking-wider text-sm font-bold hover:bg-white hover:text-black transition-all"
+          >
+            ← Back to Home
+          </a>
+          <a
+            href="/gallery"
+            class="inline-flex items-center px-6 py-3 border border-white/20 text-white uppercase tracking-wider text-sm font-bold hover:bg-white hover:text-black transition-all"
+          >
+            View Gallery
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center px-6 py-3 border border-white/20 text-white uppercase tracking-wider text-sm font-bold hover:bg-white hover:text-black transition-all"
+          >
+            Read Notes
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="p-8 text-center">
+      <p class="text-slate-400 text-sm uppercase tracking-wider">
+        Error Code: 404 • Page Missing • Taking a Drop
+      </p>
+    </div>
+  </section>
+</BaseLayout>

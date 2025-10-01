@@ -1,23 +1,28 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import BgGrid from "@/components/assets/BgGrid.astro";
 import { galleryItems } from "@/data/gallery";
 
 const shuffledGallery = [...galleryItems].sort(() => Math.random() - 0.5);
 ---
 
 <BaseLayout>
-  <main class="page-shell">
-    <div class="terminal space-y-8">
-      <div class="terminal__header">ryan@home<span>/gallery</span></div>
-      <header>
-        <h1 class="text-white text-3xl font-black uppercase tracking-tight">Gallery</h1>
-        <p class="text-sm text-slate-300">
-          287 moments from fairways, coastlines, family adventures, and everywhere in between.
-        </p>
-      </header>
+  <section id="gallery" class="border-white/20 border-b divide-y divide-white/20">
+    <div class="p-8 relative">
+      <BgGrid />
+      <h1 class="text-white tracking-tighter font-black uppercase text-3xl lg:text-8xl relative">
+        Gallery
+      </h1>
+    </div>
+    <div class="p-8">
+      <p class="text-white font-black uppercase tracking-tight lg:text-3xl text-xl mb-8">
+        287 moments from fairways, coastlines, family adventures, and everywhere in between.
+      </p>
+    </div>
+    <div class="p-8">
       <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {shuffledGallery.map((item) => (
-          <article class="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-xl" id={item.slug}>
+          <article class="relative overflow-hidden group" id={item.slug}>
             <img src={item.image} alt={item.title} class="h-64 w-full object-cover" loading="lazy" />
             <div class="absolute inset-x-0 bottom-0 bg-black/60 py-3 text-center text-[0.65rem] uppercase tracking-[0.4em] text-slate-100">
               {item.title}
@@ -26,5 +31,5 @@ const shuffledGallery = [...galleryItems].sort(() => Math.random() - 0.5);
         ))}
       </div>
     </div>
-  </main>
+  </section>
 </BaseLayout>
