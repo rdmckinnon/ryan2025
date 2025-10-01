@@ -475,10 +475,12 @@ import BgGrid from "@/components/assets/BgGrid.astro";
       chartsHTML += `
         <div class="mb-12">
           <h3 class="text-white font-bold uppercase text-lg mb-4">Daily Activity (Last 90 Days)</h3>
-          <div class="activity-chart">${barsHTML}</div>
+          <div class="activity-chart" id="daily-activity-chart">${barsHTML}</div>
           <div class="text-xs text-slate-400 text-center mt-2">Hover over bars for details</div>
         </div>
       `;
+
+      console.log('Charts HTML includes bars:', chartsHTML.includes('activity-bar'));
     }
 
     // 2. Artist Diversity
@@ -597,6 +599,13 @@ import BgGrid from "@/components/assets/BgGrid.astro";
     }
 
     document.getElementById('charts-section')!.innerHTML = chartsHTML;
+
+    // Verify bars were inserted
+    setTimeout(() => {
+      const chart = document.getElementById('daily-activity-chart');
+      console.log('Daily activity chart element:', chart);
+      console.log('Number of activity bars in DOM:', document.querySelectorAll('.activity-bar').length);
+    }, 100);
   }
 
   loadStats();
